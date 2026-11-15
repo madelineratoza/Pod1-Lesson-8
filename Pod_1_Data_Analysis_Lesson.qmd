@@ -1,0 +1,149 @@
+---
+title: "From a Question to an Analysis"
+author: "Madeline Ratoza, PT, DPT, PhD"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 2
+    toc-location: left
+    number-sections: false
+    code-copy: true
+    code-fold: false
+    embed-resources: true
+    page-layout: full
+    highlight-style: github
+execute:
+  echo: true
+  warning: true
+  message: false
+  error: false
+editor: source
+---
+
+## Three pieces to use together
+
+1. **This lesson:** follow one worked analysis and try one small change.
+2. **Companion worksheet:** record your practice result and plan your next project.
+3. **Self-Guided R Toolkit:** use the statistics references, planning templates, and troubleshooting guides after class.
+
+**Today's goal:** connect a question to a summary, a plot, and an interpretation—then choose a realistic next step in R.
+
+### The hour
+
+| Time | What we do | Where |
+|---|---|---|
+| 0–5 minutes | Name a task you would like R to help with | Brief opening discussion |
+| 5–25 minutes | Work through one analysis together | Lesson below |
+| 25–40 minutes | Adapt the example and explain one result | Worksheet page 1 and your QMD |
+| 40–55 minutes | Choose a small project and discuss the goal | Worksheet page 2 |
+| 55–60 minutes | Share the next action and find a toolkit resource | Worksheet page 2 and toolkit |
+
+**Before class:** open this QMD in an RStudio project. Rendering requires R, Quarto, and the R packages `knitr` and `rmarkdown`. If needed, install those packages once in the Console using `install.packages(c("knitr", "rmarkdown"))`. Examples use base R and the built-in `iris` dataset.
+
+## Opening discussion • 0–5 minutes
+
+What is one task you would like R to help you do: summarize a survey, make a figure, organize a recurring spreadsheet, or something else?
+
+Keep that task in mind for the goal discussion. No written response is needed yet.
+
+## Worked example • 5–25 minutes
+
+### Ask a question
+
+**How does sepal length differ across iris species in this dataset?**
+
+One row represents one flower. We need `Sepal.Length`, measured in centimeters, and `Species`, a categorical variable. We will describe the data with a summary and a plot. We do not need a statistical test to complete this first analysis.
+
+### Check the data
+
+```{r}
+flowers <- iris
+head(flowers)
+str(flowers)
+colSums(is.na(flowers[c("Sepal.Length", "Species")]))
+table(flowers$Species)
+```
+
+**Notice:** the outcome is numeric, species is categorical, and there are 50 flowers per species. Neither variable has missing values. With other data, count and explain any exclusions before summarizing.
+
+**Organization habit:** keep original data unchanged and save your steps in the QMD. A fresh R session should be able to recreate the result.
+
+### Make a summary
+
+```{r}
+# The formula reads: summarize sepal length by species.
+aggregate(Sepal.Length ~ Species, data = flowers, FUN = mean)
+```
+
+This is a table of means, not a complete picture of the distributions. Add the plot before interpreting.
+
+### Make a plot
+
+```{r}
+#| fig-alt: "Boxplots comparing sepal length in centimeters across three iris species."
+#| fig-width: 7
+#| fig-height: 4
+boxplot(Sepal.Length ~ Species, data = flowers,
+        xlab = "Species", ylab = "Sepal length (cm)",
+        col = c("#9DD9D2", "#57A9B5", "#257487"))
+```
+
+The box shows the middle 50% of values and the line marks the median. Points beyond the whiskers are potentially unusual observations to investigate; they are not automatically errors.
+
+### Explain what you found
+
+In this sample, virginica has the highest mean sepal length and setosa the lowest. The distributions overlap, particularly for versicolor and virginica. These results describe the flowers in the dataset; they do not explain why the differences occur.
+
+**Discuss:** What did the plot tell you that the table of means did not?
+
+The workflow is **ask → check → summarize → plot → explain**. You can repeat it with another variable before learning a new method.
+
+## Your turn • 25–40 minutes
+
+Open **worksheet page 1**. Answer this question:
+
+**How does petal length differ across species?**
+
+1. Identify what one row represents and the two variables you need.
+2. Copy the summary and plot code into the practice chunk below. Change `Sepal.Length` to `Petal.Length` and update the y-axis label.
+3. Record one finding and one limitation on the worksheet. Save your code in this QMD.
+
+Spend about **2 minutes planning, 8 minutes coding, and 5 minutes comparing results**.
+
+```{r}
+#| eval: false
+# Paste and adapt the summary and plot here.
+# Change eval to true when the code is ready to render.
+```
+
+If you get stuck, run one line at a time and check spelling and capitalization. You can also explain the changes you would make while following a peer's screen.
+
+::: {.callout-note collapse="true"}
+## Reveal after practice
+```{r}
+aggregate(Petal.Length ~ Species, data = flowers, FUN = mean)
+boxplot(Petal.Length ~ Species, data = flowers,
+        xlab = "Species", ylab = "Petal length (cm)",
+        col = c("#9DD9D2", "#57A9B5", "#257487"))
+```
+In this sample, virginica has the highest mean petal length and setosa the lowest. Describe the spread and overlap you see as well. Avoid claiming that species causes the observed differences based on this descriptive analysis alone.
+:::
+
+## Plan your next project • 40–55 minutes
+
+Open **worksheet page 2**. Choose a task you care about and narrow it to a small first deliverable. It can be descriptive; it does not have to include a statistical test.
+
+**Example:** “By next Friday, I will use `iris` to create one group summary and one labeled plot in Quarto. I will know it works when I can restart R, render the report, and explain the result.”
+
+- **5 minutes:** complete the project plan on page 2.
+- **8 minutes:** share your plan with a peer or the pod. Ask: Is the question answerable with these data? What can be finished in one 30-minute session?
+- **2 minutes:** revise the plan and choose a date and time to begin.
+
+Use public or approved data. If access is uncertain, choose a built-in dataset as your backup.
+
+## Close • 55–60 minutes
+
+Share the final line from worksheet page 2: **when you will work, what you will do first, and what support you need**.
+
+Open the separate **Self-Guided R Toolkit** and choose one section to return to. You do not need to read it all. A useful first project is one result you can reproduce, understand, and explain.
